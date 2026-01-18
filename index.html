@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Wedding Memories - Home</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="login-container">
+        <h2><i class="fas fa-lock"></i> Внесете Лозинка</h2>
+        <input type="password" id="password" placeholder="Лозинката Овде" autocomplete="off">
+        <button onclick="checkPassword()">
+            <i class="fas fa-arrow-right"></i> Влез
+        </button>
+        <p id="error">
+            <i class="fas fa-exclamation-circle"></i> Погрешна Лозинка!
+        </p>
+        <div style="margin-top: 20px; font-size: 0.9rem; color: #888;">
+            <i class="fas fa-info-circle"></i> Помош: Прашајте за лозинка!
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content" id="main-content">
+        <!-- HEADER -->
+        <header class="site-header">
+            <h1>Ангела & Благојче + Калина</h1>
+        </header>
+
+        <!-- DESKTOP NAVIGATION -->
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i> Почетна
+                </a></li>
+                <li><a href="categories.html" class="nav-link">
+                    <i class="fas fa-images"></i> Слики
+                </a></li>
+                <li><a href="videos.html" class="nav-link">
+                    <i class="fas fa-video"></i> Videos
+                </a></li>
+            </ul>
+        </nav>
+
+        <!-- HOME CONTENT -->
+        <div class="home-content">
+            <div class="couple-names">Ангела & Благојче + Калина</div>
+            
+            <div class="wedding-date">
+                <i class="fas fa-calendar-alt"></i> 14.06.2025
+            </div>
+            
+            <div class="welcome-message">
+                Welcome to our special wedding memories gallery! 
+                We're so happy to share these precious moments with you.
+            </div>
+            
+            <div class="wedding-placeholder">
+                <div style="text-align: center; position: relative; z-index: 1;">
+                    <div style="font-size: 3.5rem; color: #1e90ff;">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div style="font-size: 1.3rem; color: #ffffff; margin-top: 15px;">
+                        Our Wedding Day
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quote">
+                "Love is not about how many days, months, or years you have been together. 
+                Love is about how much you love each other every single day."
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-compass"></i> How to navigate:</h3>
+                <ul>
+                    <li><i class="fas fa-camera"></i> <strong>Слики</strong> - Browse wedding photos by category</li>
+                    <li><i class="fas fa-film"></i> <strong>Videos</strong> - Watch wedding videos and highlights</li>
+                    <li><i class="fas fa-hand-pointer"></i> Tap any category to view photos</li>
+                    <li><i class="fas fa-cloud"></i> All media hosted on Google Drive</li>
+                </ul>
+            </div>
+            
+            <div style="margin-top: 40px; color: #888888; padding-top: 20px; border-top: 1px solid #333;">
+                Thank you for being part of our special day 
+                <span class="heart">♥</span>
+            </div>
+        </div>
+
+        <!-- MOBILE BOTTOM NAVIGATION -->
+        <nav class="mobile-nav-bottom">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html" class="mobile-nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Почетна</span>
+                </a></li>
+                <li><a href="categories.html" class="mobile-nav-link">
+                    <i class="fas fa-images"></i>
+                    <span>Слики</span>
+                </a></li>
+                <li><a href="videos.html" class="mobile-nav-link">
+                    <i class="fas fa-video"></i>
+                    <span>Videos</span>
+                </a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        // Base64 encoded password: 14062025 -> MTQwNjIwMjU=
+        const correctPassword = atob("MTQwNjIwMjU=");
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        function checkPassword() {
+            const input = document.getElementById('password').value;
+            if(input === correctPassword) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                
+                // Store authentication in session storage
+                sessionStorage.setItem('weddingAuth', 'true');
+            } else {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('password').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.getElementById('password').style.animation = '';
+                }, 500);
+            }
+        }
+
+        // Check if already authenticated
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('weddingAuth') === 'true') {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                document.getElementById('password').focus();
+            }
+            
+            // Enter key support
+            document.getElementById('password').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

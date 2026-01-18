@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Wedding Memories - Church Photos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+    <!-- Authentication Check -->
+    <div class="auth-check" id="auth-check">
+        <div style="font-size: 1.2rem; margin-bottom: 20px;">
+            <i class="fas fa-lock fa-2x"></i>
+        </div>
+        <p>Please return to the homepage to authenticate.</p>
+        <a href="index.html" style="color: #1e90ff; margin-top: 20px;">Go to Homepage</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content" style="display: none;">
+        <!-- Header -->
+        <header class="site-header">
+            <a href="categories.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Ангела & Благојче + Калина</h1>
+            <div class="page-info">
+                Page 1 of 5
+            </div>
+        </header>
+
+        <!-- Gallery Title -->
+        <div class="gallery-title">
+            <i class="fas fa-church"></i>
+            Црква - Church Photos
+        </div>
+
+        <!-- Photos Grid - First 100 Photos -->
+        <div class="photos-grid" id="photos-grid">
+            <!-- Photos 1-100 will be loaded here -->
+        </div>
+
+        <!-- Google Drive Embed -->
+        <div style="text-align: center; margin: 30px 0;">
+            <h3 style="color: #1e90ff; margin-bottom: 15px;">
+                <i class="fas fa-images"></i> Browse All Church Photos
+            </h3>
+            <iframe class="drive-embed"
+                src="https://drive.google.com/embeddedfolderview?id=YOUR_DRIVE_FOLDER_ID#grid"
+                frameborder="0"
+                allow="autoplay"
+                loading="lazy">
+            </iframe>
+            <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">
+                <i class="fas fa-info-circle"></i> Use two fingers to scroll on mobile
+            </p>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <span class="current">1</span>
+            <a href="gallery-church-page2.html">2</a>
+            <a href="gallery-church-page3.html">3</a>
+            <a href="gallery-church-page4.html">4</a>
+            <a href="gallery-church-page5.html">5</a>
+            <a href="gallery-church-page2.html">
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <a href="gallery-church-page5.html">
+                <i class="fas fa-angle-double-right"></i>
+            </a>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav-bottom">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html" class="mobile-nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Почетна</span>
+                </a></li>
+                <li><a href="categories.html" class="mobile-nav-link">
+                    <i class="fas fa-images"></i>
+                    <span>Слики</span>
+                </a></li>
+                <li><a href="videos.html" class="mobile-nav-link">
+                    <i class="fas fa-video"></i>
+                    <span>Videos</span>
+                </a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('weddingAuth') === 'true') {
+                document.getElementById('auth-check').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                document.getElementById('auth-check').style.display = 'flex';
+            }
+
+            // Load photos
+            loadPhotos();
+        });
+
+        function loadPhotos() {
+            const photosGrid = document.getElementById('photos-grid');
+            const totalPhotos = 500; // Total church photos
+            const photosPerPage = 100;
+            const currentPage = 1;
+
+            // Generate sample photo items (in real implementation, these would be actual image URLs)
+            for (let i = 1; i <= Math.min(20, photosPerPage); i++) {
+                const photoNumber = (currentPage - 1) * photosPerPage + i;
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item loading';
+                photoItem.innerHTML = `
+                    <div class="photo-loading">
+                        <i class="fas fa-spinner fa-spin loading-pulse"></i>
+                    </div>
+                    <img src="https://via.placeholder.com/300x225/1f1f1f/1e90ff?text=Church+Photo+${photoNumber}" 
+                         alt="Church Photo ${photoNumber}"
+                         loading="lazy"
+                         onload="this.parentElement.classList.remove('loading')">
+                    <div class="photo-number">${photoNumber}</div>
+                `;
+                photoItem.onclick = function() {
+                    openModal(photoNumber);
+                };
+                photosGrid.appendChild(photoItem);
+            }
+        }
+
+        // Modal functionality
+        let currentModalIndex = 0;
+        const totalPhotos = 500;
+
+        function openModal(index) {
+            currentModalIndex = index;
+            const modal = document.createElement('div');
+            modal.className = 'photo-modal';
+            modal.id = 'photoModal';
+            modal.innerHTML = `
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-nav">
+                    <button onclick="prevPhoto()">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button onclick="nextPhoto()">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <img id="modalImage" src="https://via.placeholder.com/800x600/1f1f1f/1e90ff?text=Church+Photo+${index}" alt="Photo ${index}">
+                    <div class="modal-counter" id="modalCounter">Photo ${index} of ${totalPhotos}</div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('photoModal');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function nextPhoto() {
+            if (currentModalIndex < totalPhotos) {
+                closeModal();
+                openModal(currentModalIndex + 1);
+            }
+        }
+
+        function prevPhoto() {
+            if (currentModalIndex > 1) {
+                closeModal();
+                openModal(currentModalIndex - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('photoModal');
+            if (modal) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                } else if (e.key === 'ArrowRight') {
+                    nextPhoto();
+                } else if (e.key === 'ArrowLeft') {
+                    prevPhoto();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

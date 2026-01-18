@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Wedding Memories - Photo Categories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Authentication Check -->
+    <div class="auth-check" id="auth-check">
+        <div style="font-size: 1.2rem; margin-bottom: 20px;">
+            <i class="fas fa-lock fa-2x"></i>
+        </div>
+        <p>Please return to the homepage to authenticate.</p>
+        <a href="index.html" style="color: #1e90ff; margin-top: 20px;">Go to Homepage</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content" style="display: none;">
+        <!-- Header -->
+        <header class="site-header">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Ангела & Благојче + Калина</h1>
+        </header>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <i class="fas fa-images"></i> Select Photo Category
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="categories-grid">
+            <a href="gallery-church.html" class="category-card">
+                <div class="category-icon"><i class="fas fa-church"></i></div>
+                <div class="category-name">Црква</div>
+                <div class="category-count">Church Photos</div>
+            </a>
+            
+            <a href="gallery-reception.html" class="category-card">
+                <div class="category-icon"><i class="fas fa-utensils"></i></div>
+                <div class="category-name">Ресторан</div>
+                <div class="category-count">Reception Photos</div>
+            </a>
+            
+            <a href="gallery-guests.html" class="category-card">
+                <div class="category-icon"><i class="fas fa-users"></i></div>
+                <div class="category-name">Гости</div>
+                <div class="category-count">Guests Photos</div>
+            </a>
+            
+            <a href="gallery-photoshoot.html" class="category-card">
+                <div class="category-icon"><i class="fas fa-camera"></i></div>
+                <div class="category-name">Фотосесија</div>
+                <div class="category-count">Photoshoot</div>
+            </a>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav-bottom">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html" class="mobile-nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Почетна</span>
+                </a></li>
+                <li><a href="categories.html" class="mobile-nav-link active">
+                    <i class="fas fa-images"></i>
+                    <span>Слики</span>
+                </a></li>
+                <li><a href="videos.html" class="mobile-nav-link">
+                    <i class="fas fa-video"></i>
+                    <span>Videos</span>
+                </a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('weddingAuth') === 'true') {
+                document.getElementById('auth-check').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                document.getElementById('auth-check').style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

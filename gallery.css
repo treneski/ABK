@@ -1,0 +1,123 @@
+.photos-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    padding:20px 10px;
+}
+
+.photo-item {
+    position:relative;
+    border-radius:12px;
+    overflow:hidden;
+    cursor:pointer;
+    background:#1f1f1f;
+    border:1px solid #333;
+    transition:0.3s;
+}
+
+.photo-item:hover {
+    transform:scale(1.05);
+    box-shadow:0 10px 25px rgba(30,144,255,.4);
+    border-color:#1e90ff;
+}
+
+.photo-item img {
+    width:100%;
+    display:block;
+}
+
+.photo-number {
+    position:absolute;
+    top:8px;
+    left:8px;
+    background:rgba(30,144,255,.8);
+    color:#fff;
+    font-size:.75rem;
+    padding:3px 6px;
+    border-radius:6px;
+}
+
+.photo-filename {
+    position:absolute;
+    bottom:8px;
+    left:8px;
+    right:8px;
+    font-size:.75rem;
+    color:#fff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* FIXED BLOCK */
+.photo-loading {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:140px;
+    background:#2d2d2d;
+}
+
+/* MODAL */
+.photo-modal {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.9);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.modal-content {
+    max-width:90%;
+    max-height:85%;
+    position:relative;
+}
+
+.modal-content img {
+    width:100%;
+    border-radius:12px;
+}
+
+.modal-close {
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-size:1.8rem;
+    background:rgba(30,144,255,.6);
+    border:none;
+    color:#fff;
+    padding:6px 10px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.modal-nav {
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+}
+
+.modal-nav button {
+    pointer-events:auto;
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(30,144,255,.6);
+    border:none;
+    color:white;
+    font-size:2rem;
+    padding:10px 15px;
+    border-radius:50%;
+    cursor:pointer;
+}
+
+.modal-nav button:first-child { left:10px; }
+.modal-nav button:last-child { right:10px; }
+
+.modal-counter {
+    margin-top:10px;
+    color:#fff;
+    text-align:center;
+}

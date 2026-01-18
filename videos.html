@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Wedding Memories - Videos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="videos.css">
+</head>
+<body>
+    <!-- Authentication Check -->
+    <div class="auth-check" id="auth-check">
+        <div style="font-size: 1.2rem; margin-bottom: 20px;">
+            <i class="fas fa-lock fa-2x"></i>
+        </div>
+        <p>Please return to the homepage to authenticate.</p>
+        <a href="index.html" style="color: #1e90ff; margin-top: 20px;">Go to Homepage</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content" style="display: none;">
+        <!-- Header -->
+        <header class="site-header">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1>Ангела & Благојче + Калина</h1>
+        </header>
+
+        <!-- Page Title -->
+        <div class="page-title">
+            <i class="fas fa-video"></i> Wedding Videos
+        </div>
+
+        <!-- Video Categories -->
+        <div class="video-categories">
+            <a href="#ceremony" class="video-category active">Ceremony</a>
+            <a href="#reception" class="video-category">Reception</a>
+            <a href="#highlights" class="video-category">Highlights</a>
+            <a href="#speeches" class="video-category">Speeches</a>
+            <a href="#dancing" class="video-category">Dancing</a>
+        </div>
+
+        <!-- Videos Container -->
+        <div class="videos-container">
+            <!-- Video Item 1 -->
+            <div class="video-item">
+                <div class="video-thumbnail" onclick="playVideo('ceremony-full')">
+                    <img src="https://via.placeholder.com/800x450/1f1f1f/1e90ff?text=Wedding+Ceremony+Video" alt="Wedding Ceremony">
+                    <div class="video-play-btn">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Full Wedding Ceremony</h3>
+                    <p class="video-description">Complete ceremony from start to finish, including vows and ring exchange.</p>
+                    <div class="video-meta">
+                        <div class="video-duration">
+                            <i class="far fa-clock"></i> 45:30
+                        </div>
+                        <div class="video-date">
+                            <i class="far fa-calendar"></i> 14.06.2025
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Item 2 -->
+            <div class="video-item">
+                <div class="video-thumbnail" onclick="playVideo('reception-highlights')">
+                    <img src="https://via.placeholder.com/800x450/1f1f1f/1e90ff?text=Reception+Highlights" alt="Reception Highlights">
+                    <div class="video-play-btn">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Reception Highlights</h3>
+                    <p class="video-description">Best moments from the wedding reception including first dance and speeches.</p>
+                    <div class="video-meta">
+                        <div class="video-duration">
+                            <i class="far fa-clock"></i> 25:15
+                        </div>
+                        <div class="video-date">
+                            <i class="far fa-calendar"></i> 14.06.2025
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Item 3 -->
+            <div class="video-item">
+                <div class="video-thumbnail" onclick="playVideo('wedding-film')">
+                    <img src="https://via.placeholder.com/800x450/1f1f1f/1e90ff?text=Wedding+Film" alt="Wedding Film">
+                    <div class="video-play-btn">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Wedding Film - Short Version</h3>
+                    <p class="video-description">Beautifully edited wedding film capturing the essence of our special day.</p>
+                    <div class="video-meta">
+                        <div class="video-duration">
+                            <i class="far fa-clock"></i> 15:45
+                        </div>
+                        <div class="video-date">
+                            <i class="far fa-calendar"></i> 14.06.2025
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Drive Video Embed -->
+            <div style="text-align: center; margin: 40px 0;">
+                <h3 style="color: #1e90ff; margin-bottom: 15px;">
+                    <i class="fas fa-film"></i> Browse All Wedding Videos
+                </h3>
+                <iframe class="drive-video-embed"
+                    src="https://drive.google.com/embeddedfolderview?id=YOUR_VIDEOS_DRIVE_FOLDER_ID#grid"
+                    frameborder="0"
+                    allow="autoplay"
+                    loading="lazy">
+                </iframe>
+                <p style="color: #888; font-size: 0.9rem; margin-top: 10px;">
+                    <i class="fas fa-info-circle"></i> All videos are hosted on Google Drive
+                </p>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav-bottom">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html" class="mobile-nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Почетна</span>
+                </a></li>
+                <li><a href="categories.html" class="mobile-nav-link">
+                    <i class="fas fa-images"></i>
+                    <span>Слики</span>
+                </a></li>
+                <li><a href="videos.html" class="mobile-nav-link active">
+                    <i class="fas fa-video"></i>
+                    <span>Videos</span>
+                </a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('weddingAuth') === 'true') {
+                document.getElementById('auth-check').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                document.getElementById('auth-check').style.display = 'flex';
+            }
+
+            // Set up video category navigation
+            setupVideoCategories();
+        });
+
+        function playVideo(videoId) {
+            // In a real implementation, this would open a modal or navigate to a video player page
+            alert(`Playing video: ${videoId}\n\nIn the final version, this would open the video player.`);
+        }
+
+        function setupVideoCategories() {
+            const categories = document.querySelectorAll('.video-category');
+            categories.forEach(category => {
+                category.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all categories
+                    categories.forEach(cat => cat.classList.remove('active'));
+                    
+                    // Add active class to clicked category
+                    this.classList.add('active');
+                    
+                    // Scroll to section (in real implementation, you would filter videos)
+                    const targetId = this.getAttribute('href').substring(1);
+                    console.log(`Filtering videos by category: ${targetId}`);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
