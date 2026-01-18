@@ -4,67 +4,86 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>Wedding Memories - Photoshoot</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="gallery.css">
 </head>
-
 <body>
 
 <!-- Authentication Check -->
-<div class="auth-check" id="auth-check" style="display:none;">
-    <div class="auth-icon"><i class="fas fa-lock fa-2x"></i></div>
+<div class="auth-check" id="auth-check" style="display: none;">
+    <div class="auth-icon">
+        <i class="fas fa-lock fa-2x"></i>
+    </div>
     <p>Please return to the homepage to authenticate.</p>
     <a href="index.html" class="auth-link">Go to Homepage</a>
 </div>
 
 <!-- Main Content -->
-<div class="main-content" id="main-content" style="display:none;">
+<div class="main-content" id="main-content" style="display: none;">
 
-<header class="site-header">
-    <a href="categories.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
-    <h1>Ангела & Благојче + Калина</h1>
-    <div class="page-info" id="page-info">Loading...</div>
-</header>
+    <!-- Header -->
+    <header class="site-header">
+        <a href="categories.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1>Ангела & Благојче + Калина</h1>
+        <div class="page-info" id="page-info">Loading...</div>
+    </header>
 
-<div class="gallery-title">
-    <i class="fas fa-camera"></i> Фотосесија - Photoshoot
+    <!-- Gallery Title -->
+    <div class="gallery-title">
+        <i class="fas fa-camera"></i> Фотосесија - Photoshoot
+    </div>
+
+    <!-- Photos Grid -->
+    <div class="photos-grid" id="photos-grid"></div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading-indicator">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+        <p>Loading photos from Google Drive...</p>
+    </div>
+
+    <!-- Google Drive Embed Fallback -->
+    <div id="drive-embed-section" class="drive-embed-section" style="display:none;">
+        <h3>
+            <i class="fas fa-images"></i> Browse All Photoshoot Photos
+        </h3>
+        <iframe class="drive-embed"
+            src="https://drive.google.com/embeddedfolderview?id=1H0_bDBqIF0do9kqzPRTjbsVlukaM9Zoh#grid"
+            frameborder="0"
+            allow="autoplay"
+            loading="lazy">
+        </iframe>
+        <p class="drive-note">
+            <i class="fas fa-info-circle"></i> Use two fingers to scroll on mobile
+        </p>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav-bottom">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html" class="mobile-nav-link"><i class="fas fa-home"></i><span>Почетна</span></a></li>
+            <li><a href="categories.html" class="mobile-nav-link active"><i class="fas fa-images"></i><span>Слики</span></a></li>
+            <li><a href="videos.html" class="mobile-nav-link"><i class="fas fa-video"></i><span>Videos</span></a></li>
+        </ul>
+    </nav>
 </div>
 
-<div class="photos-grid" id="photos-grid"></div>
-
-<div id="loading" class="loading-indicator">
-    <i class="fas fa-spinner fa-spin fa-3x"></i>
-    <p>Loading photos from Google Drive...</p>
-</div>
-
-<div id="drive-embed-section" class="drive-embed-section" style="display:none;">
-    <h3><i class="fas fa-images"></i> Browse All Photoshoot Photos</h3>
-    <iframe class="drive-embed"
-        src="https://drive.google.com/embeddedfolderview?id=1H0_bDBqIF0do9kqzPRTjbsVlukaM9Zoh#grid"
-        loading="lazy"></iframe>
-</div>
-
-<div class="pagination" id="pagination"></div>
-
-</div>
-
-<!-- MODAL -->
+<!-- Modal for fullscreen viewing -->
 <div id="photoModal" class="photo-modal">
-    <button class="modal-close" onclick="closeModal()">
-        <i class="fas fa-times"></i>
-    </button>
-
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
     <div class="modal-nav">
         <button onclick="prevPhoto()"><i class="fas fa-chevron-left"></i></button>
         <button onclick="nextPhoto()"><i class="fas fa-chevron-right"></i></button>
     </div>
-
     <div class="modal-content">
-        <img id="modalImage" src="" alt="Photo">
+        <img id="modalImage" src="" alt="Photo" onerror="this.src='https://via.placeholder.com/800x600/1f1f1f/1e90ff?text=Image+not+found'">
         <div class="modal-counter" id="modalCounter"></div>
     </div>
 </div>
@@ -72,74 +91,126 @@
 <script>
 const DRIVE_FOLDER_ID = '1H0_bDBqIF0do9kqzPRTjbsVlukaM9Zoh';
 const API_KEY = 'AIzaSyAujrb6ApGKo9STjg8ic9U8Zsht-DJ-f2c';
+const SERVICE_ACCOUNT_EMAIL = 'mywedding@svadba-484719.iam.gserviceaccount.com';
 
 let drivePhotos = [];
 let currentModalIndex = 0;
 let currentPage = 1;
 const photosPerPage = 20;
 
-document.addEventListener('DOMContentLoaded', () => {
-    sessionStorage.setItem('weddingAuth','true'); // REMOVE if already handled
-    document.getElementById('main-content').style.display='block';
-    initializeGallery();
+document.addEventListener('DOMContentLoaded', function() {
+    if (sessionStorage.getItem('weddingAuth') === 'true') {
+        document.getElementById('auth-check').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        initializeGallery();
+    } else {
+        document.getElementById('auth-check').style.display = 'flex';
+        document.getElementById('main-content').style.display = 'none';
+    }
 });
 
-async function initializeGallery(){
+async function initializeGallery() {
     showLoading(true);
-    try{
+    try {
         await loadDrivePhotos();
         displayPhotos();
-    }catch(e){
-        console.error(e);
+        document.getElementById('drive-embed-section').style.display = 'none';
+    } catch (error) {
+        console.error('Gallery Error:', error);
         showFallbackViewer();
-    }finally{
+    } finally {
         showLoading(false);
     }
 }
 
-async function loadDrivePhotos(){
-    const apiUrl = `https://www.googleapis.com/drive/v3/files?q='${DRIVE_FOLDER_ID}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,createdTime)&orderBy=createdTime`;
-    const res = await fetch(apiUrl);
-    const data = await res.json();
+async function loadDrivePhotos() {
+    const apiUrl = `https://www.googleapis.com/drive/v3/files?q='${DRIVE_FOLDER_ID}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,size,createdTime)&orderBy=createdTime&pageSize=100`;
+    const response = await fetch(apiUrl);
 
-    drivePhotos = data.files
-        .filter(f => f.mimeType.startsWith('image/'))
-        .map((f,i)=>({
-            id:f.id,
-            name:f.name,
-            index:i+1,
-            thumbnail:`https://drive.google.com/thumbnail?id=${f.id}&sz=w300`,
-            full:`https://drive.google.com/uc?id=${f.id}`
-        }));
+    if (!response.ok) throw new Error('Drive API error: ' + response.status);
+
+    const data = await response.json();
+    const files = data.files || [];
+    const images = files.filter(f => f.mimeType && f.mimeType.startsWith('image/'));
+
+    if (images.length === 0) throw new Error('No images found in folder.');
+
+    drivePhotos = images.map((file, idx) => ({
+        id: file.id,
+        name: file.name,
+        thumbnail: `https://drive.google.com/thumbnail?id=${file.id}&sz=w300-h225-c`,
+        fullSize: `https://drive.google.com/uc?id=${file.id}&export=download`,
+        index: idx + 1
+    }));
 }
 
-function displayPhotos(){
-    const grid=document.getElementById('photos-grid');
-    grid.innerHTML='';
-    const start=(currentPage-1)*photosPerPage;
-    const end=Math.min(start+photosPerPage,drivePhotos.length);
+function displayPhotos() {
+    const grid = document.getElementById('photos-grid');
+    grid.innerHTML = '';
+    const start = (currentPage - 1) * photosPerPage;
+    const end = Math.min(start + photosPerPage, drivePhotos.length);
 
-    for(let i=start;i<end;i++){
-        const p=drivePhotos[i];
-        const d=document.createElement('div');
-        d.className='photo-item';
-        d.innerHTML=`
-            <img src="${p.thumbnail}" loading="lazy">
-            <div class="photo-number">${p.index}</div>
-            <div class="photo-filename">${p.name}</div>
-        `;
-        d.onclick=()=>openModal(i);
-        grid.appendChild(d);
+    for (let i = start; i < end; i++) {
+        const photo = drivePhotos[i];
+        const div = document.createElement('div');
+div.className = 'photo-item';
+div.innerHTML = `
+    <img src="${photo.thumbnail}" alt="${photo.name}" data-index="${i}" loading="lazy"
+         onerror="this.src='https://via.placeholder.com/300x225/1f1f1f/1e90ff?text=Photo+${photo.index}'">
+    <div class="photo-number">${photo.index}</div>
+    <div class="photo-filename">${photo.name}</div>
+`;
+
+        div.onclick = () => openModal(i);
+        grid.appendChild(div);
     }
+
+    updatePagination();
     updatePageInfo();
 }
 
-function openModal(i){
-    currentModalIndex=i;
-    document.getElementById('modalImage').src=drivePhotos[i].full;
-    document.getElementById('modalCounter').textContent=
-        `Photo ${drivePhotos[i].index} of ${drivePhotos.length}`;
-    document.getElementById('photoModal').style.display='flex';
+function updatePagination() {
+    const totalPages = Math.ceil(drivePhotos.length / photosPerPage);
+    const pagination = document.getElementById('pagination');
+    if (totalPages <= 1) { pagination.style.display = 'none'; return; }
+
+    let html = '';
+    if (currentPage > 1) html += `<a href="#" onclick="goToPage(${currentPage-1});return false;"><i class="fas fa-angle-left"></i></a>`;
+
+    const maxVisible = 5;
+    let start = Math.max(1, currentPage-2);
+    let end = Math.min(totalPages, start+maxVisible-1);
+    if (end-start+1 < maxVisible) start = Math.max(1,end-maxVisible+1);
+
+    if (start>1){ html+= `<a href="#" onclick="goToPage(1);return false;">1</a>`; if(start>2) html+=`<span class="dots">...</span>`;}
+    for(let i=start;i<=end;i++) html += (i===currentPage)?`<span class="current">${i}</span>`:`<a href="#" onclick="goToPage(${i});return false;">${i}</a>`;
+    if(end<totalPages){ if(end<totalPages-1) html+=`<span class="dots">...</span>`; html+=`<a href="#" onclick="goToPage(${totalPages});return false;">${totalPages}</a>`;}
+    if(currentPage<totalPages) html+= `<a href="#" onclick="goToPage(${currentPage+1});return false;"><i class="fas fa-angle-right"></i></a>`;
+
+    pagination.innerHTML = html;
+    pagination.style.display = 'flex';
+}
+
+function updatePageInfo() {
+    const totalPages = Math.ceil(drivePhotos.length / photosPerPage);
+    document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages} (${drivePhotos.length} photos)`;
+}
+
+function goToPage(page){
+    currentPage = page;
+    displayPhotos();
+    window.scrollTo(0,0);
+    return false;
+}
+
+function openModal(index){
+    if(!drivePhotos[index]) return;
+    currentModalIndex = index;
+    const photo = drivePhotos[index];
+    const modal = document.getElementById('photoModal');
+    document.getElementById('modalImage').src = photo.fullSize;
+    document.getElementById('modalCounter').textContent = `Photo ${photo.index} of ${drivePhotos.length}: ${photo.name}`;
+    modal.style.display='flex';
     document.body.style.overflow='hidden';
 }
 
@@ -148,20 +219,35 @@ function closeModal(){
     document.body.style.overflow='auto';
 }
 
-function nextPhoto(){ if(currentModalIndex<drivePhotos.length-1) openModal(currentModalIndex+1); }
-function prevPhoto(){ if(currentModalIndex>0) openModal(currentModalIndex-1); }
-
-function showLoading(s){ document.getElementById('loading').style.display=s?'block':'none'; }
-function showFallbackViewer(){
-    document.getElementById('drive-embed-section').style.display='block';
+function nextPhoto(){
+    if(currentModalIndex<drivePhotos.length-1) openModal(currentModalIndex+1);
 }
 
-document.addEventListener('keydown',e=>{
-    if(document.getElementById('photoModal').style.display==='flex'){
+function prevPhoto(){
+    if(currentModalIndex>0) openModal(currentModalIndex-1);
+}
+
+function showLoading(show){
+    document.getElementById('loading').style.display = show ? 'block':'none';
+}
+
+function showFallbackViewer(){
+    document.getElementById('drive-embed-section').style.display='block';
+    document.getElementById('photos-grid').innerHTML = `<div class="fallback-viewer"><p><i class="fas fa-info-circle"></i> Using Google Drive embedded viewer</p></div>`;
+}
+
+document.addEventListener('keydown',(e)=>{
+    const modal=document.getElementById('photoModal');
+    if(modal.style.display==='flex'){
         if(e.key==='Escape') closeModal();
         if(e.key==='ArrowRight') nextPhoto();
         if(e.key==='ArrowLeft') prevPhoto();
     }
+});
+
+document.addEventListener('click',(e)=>{
+    const modal=document.getElementById('photoModal');
+    if(modal.style.display==='flex' && e.target===modal) closeModal();
 });
 </script>
 
